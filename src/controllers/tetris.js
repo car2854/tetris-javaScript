@@ -6,6 +6,9 @@ class TetrisControllers{
   timeOut = 100;
   initialTime = 0;
 
+  timeOutX = 25;
+  initialTimeX = 0;
+
   piece = {
     x: 0,
     y: 0,
@@ -43,19 +46,18 @@ class TetrisControllers{
     ];
 
     document.addEventListener('keydown', this.handleKeyDown.bind(this));
+    document.addEventListener('keyup', this.handleKeyUp.bind(this));
   }
   
   updateGame(){
     
-    this.time();
-
     this.tetrisView.clearScreen();
     this.tetrisView.render();
     this.tetrisView.renderTable(this.table);
     if(this.piece.data != null) this.tetrisView.renderPiece(this.piece);
 
     if (this.piece.data === null){
-      this.piece.data = this.bagController.putOnePiece();
+      this.piece.data = this.bagController.takeOnePiece();
       this.piece.x = 5,
       this.piece.y = 0;
     }else{
@@ -68,9 +70,21 @@ class TetrisControllers{
   movePiece(){
 
     if (this.verifyPiece() === 'ok'){
-      this.piece.y = this.piece.y + this.controlControllers[1];
-      this.piece.x = this.piece.x + this.controlControllers[0];
-      this.controlControllers[0] = 0;
+
+      this.initialTime = this.initialTime + 1;
+      if (this.initialTime === this.timeOut){
+        this.initialTime = 0;
+        this.piece.y = this.piece.y + this.controlControllers[1];
+      }
+      
+      this.initialTimeX = this.initialTimeX + 1;
+      if (this.timeOutX === this.initialTimeX){
+        this.initialTimeX = 0;
+        this.piece.x = this.piece.x + this.controlControllers[0];
+      }
+
+      
+
     }else if (this.verifyPiece() === 'limit-y'){
       this.concatenate();
       this.piece  = { x: 0, y: 0, data: null };
@@ -126,13 +140,36 @@ class TetrisControllers{
     if (event.key === 'd'){
       this.controlControllers[0] = 1;
     }
+    if (event.key === ' '){
+      this.rotate();
+    }
   }
 
-  time(){
-    this.initialTime = this.initialTime + 1;
-    if (this.initialTime === this.timeOut){
-      this.initialTime = 0;
-      this.controlControllers[1] = 1;
-    }else this.controlControllers[1] = 0;
+  handleKeyUp(event){
+    if (['a','d'].includes(event.key)) this.controlControllers[0] = 0;
   }
+
+  rotate(){
+
+    const pieceRotate = [];
+    const lengthY = this.piece.data[0].piece.length;
+    const lengthX = this.piece.data[0].piece[0].length;
+
+    for (let i = 0; i < lengthX; i++) {
+      
+      const newRow = [];
+
+      for (let j = 0; j < lengthY; j++) {
+
+        newRow.push(this.piece.data[0].piece[j][(lengthX - 1) - i]);
+        
+      }
+      pieceRotate.push(newRow);
+      
+    }
+
+    this.piece.data[0].piece = pieceRotate;
+
+  }
+
 }

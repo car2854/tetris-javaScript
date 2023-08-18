@@ -6,7 +6,7 @@ class BagController{
     this.pieces = new Pieces();
   }
 
-  putOnePiece(){
+  takeOnePiece(){
     if (this.bag.length === 0) this.fillBag();
     const piece = this.bag.pop();
     return piece;
