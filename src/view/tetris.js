@@ -3,6 +3,7 @@ class TetrisView{
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
 
+    this.colors = ['cyan', 'yellow', 'green', 'red', 'orange', 'blue', 'pink'];
   }
 
   clearScreen(){
@@ -16,8 +17,8 @@ class TetrisView{
       this.ctx.beginPath();
       this.ctx.moveTo(i,0);
       this.ctx.lineTo(i,800);
-      this.ctx.strokeStyle = "blue";
-      this.ctx.lineWidth = 1;
+      this.ctx.strokeStyle = "black";
+      this.ctx.lineWidth = 0.1;
       this.ctx.stroke();
     }
 
@@ -26,18 +27,17 @@ class TetrisView{
       this.ctx.beginPath();
       this.ctx.moveTo(0,i);
       this.ctx.lineTo(360,i);
-      this.ctx.strokeStyle = "blue";
-      this.ctx.lineWidth = 1;
+      this.ctx.strokeStyle = "black";
+      this.ctx.lineWidth = 0.1;
       this.ctx.stroke();
     }
   }
 
   renderTable(table){
-    // console.clear();
     table.forEach((elementY, y) => {
       elementY.forEach((elementX , x) => {
         if (elementX > 0){
-          this.ctx.fillStyle = 'blue';
+          this.ctx.fillStyle = this.colors[elementX - 1];
           this.ctx.fillRect(x*30,y*30,30,30);
         }
       });
@@ -50,7 +50,7 @@ class TetrisView{
     piece.data[0].piece.forEach((elementY, y) => {
       elementY.forEach((elementX, x) => {
         if (elementX > 0){
-          this.ctx.fillStyle = 'blue';
+          this.ctx.fillStyle = this.colors[piece.data[0].code - 1];
           this.ctx.fillRect((x+piece.x) * 30,(y+piece.y)*30,30,30);
         }
       });

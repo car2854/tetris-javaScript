@@ -67,31 +67,48 @@ class TetrisControllers{
   
   movePiece(){
 
-    if (this.verifyPiece()){
-      
+    if (this.verifyPiece() === 'ok'){
       this.piece.y = this.piece.y + this.controlControllers[1];
       this.piece.x = this.piece.x + this.controlControllers[0];
       this.controlControllers[0] = 0;
-    }else{
+    }else if (this.verifyPiece() === 'limit-y'){
       this.concatenate();
       this.piece  = { x: 0, y: 0, data: null };
+    }else if(this.verifyPiece() === 'limit-x'){
+      this.controlControllers[0] = 0;
     }
   }
 
-
+  // Status: ok, limit-y, limit-x
   verifyPiece(){
-    let isValid = true;
+    let status = 'ok';
     this.piece.data[0].piece.forEach((elementY, y) => {
       elementY.forEach((elementX, x) => {
+        
         if (
-          y + this.piece.y + this.controlControllers[1] > 21 ||
-          this.table[this.piece.y + y + this.controlControllers[1]][this.piece.x + x + this.controlControllers[0]] + elementX > 1
+          elementX != 0
         ){
-          isValid = false;
+          if (
+            this.table[this.piece.y + y][this.piece.x + x + this.controlControllers[0]] + elementX > this.piece.data[0].code ||
+            x + this.piece.x + this.controlControllers[0] > 11 ||
+            x + this.piece.x + this.controlControllers[0] < 0
+          ){
+            status = 'limit-x';
+            return
+          }
+          if (
+            y + this.piece.y + this.controlControllers[1] > 21 ||
+            this.table[this.piece.y + y + this.controlControllers[1]][this.piece.x + x] + elementX > this.piece.data[0].code
+          ){
+            status = 'limit-y';
+            return;
+          }
         }
+
       });
+      if (status != 'ok') return;
     });
-    return isValid;
+    return status;
   }
 
   concatenate(){
