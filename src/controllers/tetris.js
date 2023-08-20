@@ -6,7 +6,7 @@ class TetrisControllers{
   timeOut = 100;
   initialTime = 0;
 
-  timeOutX = 25;
+  timeOutX = 20;
   initialTimeX = 0;
 
   piece = {
@@ -14,6 +14,9 @@ class TetrisControllers{
     y: 0,
     data: null
   };
+
+  points = 0;
+  deleteLines = 0;
 
   constructor(tetrisView, pieces, bagController){
     this.tetrisView = tetrisView;
@@ -64,25 +67,35 @@ class TetrisControllers{
       this.movePiece();
     }
 
+    
+    if (this.deleteLines === 5){
+      this.deleteLines = 0;
+      if (this.timeOut >= 20){
+        this.timeOut = this.timeOut / 2;
+      }
+    }
+    
 
   }
   
   movePiece(){
 
+    this.initialTime = this.initialTime + 1;
+    this.initialTimeX = this.initialTimeX + 1;
+
     if (this.verifyPiece() === 'ok'){
 
-      this.initialTime = this.initialTime + 1;
-      if (this.initialTime === this.timeOut){
+      if (this.initialTime >= this.timeOut){
         this.initialTime = 0;
         this.piece.y = this.piece.y + this.controlControllers[1];
       }
       
-      this.initialTimeX = this.initialTimeX + 1;
-      if (this.timeOutX === this.initialTimeX){
+      if (this.timeOutX <= this.initialTimeX){
         this.initialTimeX = 0;
         this.piece.x = this.piece.x - this.controlControllers[0];
         this.piece.x = this.piece.x + this.controlControllers[2];
       }
+
 
     }else if (this.verifyPiece() === 'limit-y'){
       this.concatenate();
@@ -91,6 +104,7 @@ class TetrisControllers{
       this.piece  = { x: 0, y: 0, data: null };
     }else if(this.verifyPiece() === 'limit-x'){
       this.controlControllers[0] = 0;
+      this.controlControllers[2] = 0;
     }
   }
 
@@ -112,6 +126,8 @@ class TetrisControllers{
     while (deleteLine > 0) {
       this.table.unshift([0,0,0,0,0,0,0,0,0,0,0,0]);
       deleteLine--;
+      this.points = this.points + 100;
+      this.deleteLines++;  
     }
 
   }
@@ -121,14 +137,13 @@ class TetrisControllers{
     let status = 'ok';
     this.piece.data[0].piece.forEach((elementY, y) => {
       elementY.forEach((elementX, x) => {
-        
         if (
           elementX != 0
-        ){
+          ){
           if (
             this.table[this.piece.y + y][this.piece.x + x + ( - this.controlControllers[0] + this.controlControllers[2])] + elementX > this.piece.data[0].code ||
             x + this.piece.x + this.controlControllers[2] > 11 ||
-            x + this.piece.x + this.controlControllers[0] < 0
+            x + this.piece.x - this.controlControllers[0] < 0
           ){
             status = 'limit-x';
             return
