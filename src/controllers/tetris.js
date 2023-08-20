@@ -168,8 +168,30 @@ class TetrisControllers{
       
     }
 
-    this.piece.data[0].piece = pieceRotate;
+    if (this.verifyRotate(pieceRotate, this.piece)){
+      this.piece.data[0].piece = pieceRotate;
+    }
 
+
+  }
+
+  verifyRotate = (pieceRotate, piece) => {
+
+    let isValue = true;
+
+    pieceRotate.forEach((elementY, y) => {
+      elementY.forEach((elementX, x) => {
+        if (this.table[y + piece.y][x + piece.x] === undefined || this.table[y + piece.y][x + piece.x] + elementX > piece.data[0].code) {
+          isValue = false;
+          return;
+        };
+      });
+      if (!isValue){
+        return;
+      }
+    });
+
+    return isValue;
   }
 
 }
