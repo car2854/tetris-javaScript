@@ -83,14 +83,36 @@ class TetrisControllers{
         this.piece.x = this.piece.x + this.controlControllers[0];
       }
 
-      
-
     }else if (this.verifyPiece() === 'limit-y'){
       this.concatenate();
+      // Si concatena, se tiene que verificar las lineas para saber, si hay una linea completa, esto lo pongo aqui, por que logicamente, esto no se debe ejecutar todo el rato, simplemente cuando la pieza forma parte con la tabla
+      this.verifyLineTable();
       this.piece  = { x: 0, y: 0, data: null };
     }else if(this.verifyPiece() === 'limit-x'){
       this.controlControllers[0] = 0;
     }
+  }
+
+  verifyLineTable = () => {
+
+    let deleteLine = 0;
+
+    this.table = this.table.filter((element, y) => {
+      const exist = element.every((value) => {
+        return value > 0;
+      });
+      if (exist){
+        deleteLine++;
+        return false;
+      }
+      return true;
+    }).map((_) => _);
+    
+    while (deleteLine > 0) {
+      this.table.unshift([0,0,0,0,0,0,0,0,0,0,0,0]);
+      deleteLine--;
+    }
+
   }
 
   // Status: ok, limit-y, limit-x
@@ -150,48 +172,35 @@ class TetrisControllers{
   }
 
   rotate(){
-
     const pieceRotate = [];
     const lengthY = this.piece.data[0].piece.length;
     const lengthX = this.piece.data[0].piece[0].length;
-
     for (let i = 0; i < lengthX; i++) {
-      
       const newRow = [];
-
       for (let j = 0; j < lengthY; j++) {
-
         newRow.push(this.piece.data[0].piece[j][(lengthX - 1) - i]);
-        
       }
       pieceRotate.push(newRow);
-      
     }
-
     if (this.verifyRotate(pieceRotate, this.piece)){
       this.piece.data[0].piece = pieceRotate;
     }
-
-
   }
 
   verifyRotate = (pieceRotate, piece) => {
-
-    let isValue = true;
-
+    let isRotate = true;
     pieceRotate.forEach((elementY, y) => {
       elementY.forEach((elementX, x) => {
         if (this.table[y + piece.y][x + piece.x] === undefined || this.table[y + piece.y][x + piece.x] + elementX > piece.data[0].code) {
-          isValue = false;
+          isRotate = false;
           return;
         };
       });
-      if (!isValue){
+      if (!isRotate){
         return;
       }
     });
-
-    return isValue;
+    return isRotate;
   }
 
 }
