@@ -1,7 +1,7 @@
 class TetrisControllers{
 
-  // controller x,y
-  controlControllers = [0,1];
+  // controller -x,y,+x
+  controlControllers = [0,1,0];
 
   timeOut = 100;
   initialTime = 0;
@@ -80,7 +80,8 @@ class TetrisControllers{
       this.initialTimeX = this.initialTimeX + 1;
       if (this.timeOutX === this.initialTimeX){
         this.initialTimeX = 0;
-        this.piece.x = this.piece.x + this.controlControllers[0];
+        this.piece.x = this.piece.x - this.controlControllers[0];
+        this.piece.x = this.piece.x + this.controlControllers[2];
       }
 
     }else if (this.verifyPiece() === 'limit-y'){
@@ -125,8 +126,8 @@ class TetrisControllers{
           elementX != 0
         ){
           if (
-            this.table[this.piece.y + y][this.piece.x + x + this.controlControllers[0]] + elementX > this.piece.data[0].code ||
-            x + this.piece.x + this.controlControllers[0] > 11 ||
+            this.table[this.piece.y + y][this.piece.x + x + ( - this.controlControllers[0] + this.controlControllers[2])] + elementX > this.piece.data[0].code ||
+            x + this.piece.x + this.controlControllers[2] > 11 ||
             x + this.piece.x + this.controlControllers[0] < 0
           ){
             status = 'limit-x';
@@ -157,10 +158,10 @@ class TetrisControllers{
 
   handleKeyDown(event){
     if (event.key === 'a'){
-      this.controlControllers[0] = -1;
+      this.controlControllers[0] = 1;
     }
     if (event.key === 'd'){
-      this.controlControllers[0] = 1;
+      this.controlControllers[2] = 1;
     }
     if (event.key === ' '){
       this.rotate();
@@ -168,7 +169,12 @@ class TetrisControllers{
   }
 
   handleKeyUp(event){
-    if (['a','d'].includes(event.key)) this.controlControllers[0] = 0;
+    if (event.key === 'a'){
+      this.controlControllers[0] = 0;
+    }
+    if (event.key === 'd'){
+      this.controlControllers[2] = 0;
+    }
   }
 
   rotate(){
