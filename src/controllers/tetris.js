@@ -10,6 +10,8 @@ class TetrisControllers{
   timeOutX = CONFIG.TIME_OUT_X;
   initialTimeX = 0;
 
+  gameOver = false;
+
   piece = {
     x: 0,
     y: 0,
@@ -58,23 +60,33 @@ class TetrisControllers{
     this.tetrisView.clearScreen();
     this.tetrisView.render();
     this.tetrisView.renderTable(this.table);
+
     if(this.piece.data != null) this.tetrisView.renderPiece(this.piece);
 
-    if (this.piece.data === null){
-      this.piece.data = this.bagController.takeOnePiece();
-      this.piece.x = 5,
-      this.piece.y = 0;
+    if (!this.gameOver){
+  
+      if (this.piece.data === null){
+        this.piece.data = this.bagController.takeOnePiece();
+        this.piece.x = 5,
+        this.piece.y = 0;
+        this.gameOver = (this.verifyPiece() != 'ok');
+      }else{
+        this.movePiece();
+      }
+  
+      
+      if (this.deleteLines === CONFIG.MAX_LINE_DELETE){
+        this.deleteLines = 0;
+        if (this.timeOut >= 20){
+          this.timeOut = this.timeOut / 2;
+        }
+      }
     }else{
-      this.movePiece();
+
+      // GameOver
+
     }
 
-    
-    if (this.deleteLines === CONFIG.MAX_LINE_DELETE){
-      this.deleteLines = 0;
-      if (this.timeOut >= 20){
-        this.timeOut = this.timeOut / 2;
-      }
-    }
     
 
   }

@@ -1,3 +1,20 @@
+*{
+  font-family: 'Courier New', Courier, monospace;
+  background-color: black;
+  color: white;
+}
+
 canvas{
-  border: 1px solid black;
+  border: 1px solid rgb(193, 193, 253);
+}
+
+h1{
+  text-align: center;
+}
+
+.game{
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
