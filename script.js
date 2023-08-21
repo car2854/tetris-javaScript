@@ -1,4 +1,4 @@
-const tetrisView = new TetrisView('canvas');
+const tetrisView = new TetrisView('canvas', 'points');
 const pieces = new Pieces();
 
 // bag

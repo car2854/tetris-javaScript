@@ -1,6 +1,7 @@
 class TetrisView{
-  constructor(id){
-    this.canvas = document.getElementById('canvas');
+  constructor(id, idPoints){
+    this.canvas = document.getElementById(id);
+    this.textPoints = document.getElementById(idPoints);
     this.ctx = this.canvas.getContext('2d');
 
     this.colors = ['cyan', 'yellow', 'green', 'red', 'orange', 'blue', 'pink'];
@@ -56,5 +57,9 @@ class TetrisView{
       });
     });
 
+  }
+
+  renderPoints(points){
+    this.textPoints.textContent = points;
   }
 }

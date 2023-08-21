@@ -1,12 +1,13 @@
+
 class TetrisControllers{
 
   // controller -x,y,+x
   controlControllers = [0,1,0];
 
-  timeOut = 100;
+  timeOut = CONFIG.TIME_OUT_Y;
   initialTime = 0;
 
-  timeOutX = 20;
+  timeOutX = CONFIG.TIME_OUT_X;
   initialTimeX = 0;
 
   piece = {
@@ -68,7 +69,7 @@ class TetrisControllers{
     }
 
     
-    if (this.deleteLines === 5){
+    if (this.deleteLines === CONFIG.MAX_LINE_DELETE){
       this.deleteLines = 0;
       if (this.timeOut >= 20){
         this.timeOut = this.timeOut / 2;
@@ -130,6 +131,8 @@ class TetrisControllers{
       this.deleteLines++;  
     }
 
+    this.tetrisView.renderPoints(this.points);
+
   }
 
   // Status: ok, limit-y, limit-x
@@ -153,6 +156,15 @@ class TetrisControllers{
             this.table[this.piece.y + y + this.controlControllers[1]][this.piece.x + x] + elementX > this.piece.data[0].code
           ){
             status = 'limit-y';
+            return;
+          }
+          if (
+            x + this.piece.x + this.controlControllers[2] > 11  ||
+            x + this.piece.x - this.controlControllers[0] < 0   ||
+            y + this.piece.y + this.controlControllers[1] > 21  ||
+            this.table[this.piece.y + y + this.controlControllers[1]][this.piece.x + x + ( - this.controlControllers[0] + this.controlControllers[2])] + elementX > this.piece.data[0].code
+          ){
+            status = 'limit-x';
             return;
           }
         }
