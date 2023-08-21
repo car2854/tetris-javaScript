@@ -63,8 +63,10 @@ class TetrisView{
   renderPoints(points){
     this.textPoints.textContent = points;
   }
-  
+
   renderGameOver(){
-    this.textGameOver.classList.remove('hidden');
+    if(this.textGameOver.classList.contains('hidden')){
+      this.textGameOver.classList.remove('hidden');
+    }
   }
 }

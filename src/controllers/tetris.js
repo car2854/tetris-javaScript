@@ -84,7 +84,6 @@ class TetrisControllers{
     }else{
 
       this.tetrisView.renderGameOver();
-      // GameOver
 
     }
 
