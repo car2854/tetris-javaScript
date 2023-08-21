@@ -205,6 +205,32 @@ class TetrisControllers{
     if (event.key === ' '){
       this.rotate();
     }
+    if (event.key === 's'){
+      this.piece.y = this.verifyPieceAllY(this.piece.y)
+    }
+  }
+
+  verifyPieceAllY(posY){
+    if (!this.isAcceptY(posY + 1)){
+      return posY;
+    }else{
+      posY = this.verifyPieceAllY(posY + 1);
+      return posY;
+    }
+  }
+
+  isAcceptY(posY){
+    let status = true;
+    this.piece.data[0].piece.forEach((elementY, y) => {
+      elementY.forEach((elementX, x) => {
+        if (elementX != 0){
+          if (y + posY > 21 || this.table[posY + y][this.piece.x + x] + elementX > this.piece.data[0].code) {
+            status = false
+          };
+        }
+      });
+    });
+    return status;
   }
 
   handleKeyUp(event){
