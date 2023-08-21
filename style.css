@@ -12,9 +12,17 @@ h1{
   text-align: center;
 }
 
+.game-over{
+  background-color: red;
+}
+
 .game{
   display: flex;
   gap: 20px;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.hidden{
+  visibility: hidden;
 }

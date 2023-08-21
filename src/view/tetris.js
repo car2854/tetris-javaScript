@@ -2,6 +2,7 @@ class TetrisView{
   constructor(id, idPoints){
     this.canvas = document.getElementById(id);
     this.textPoints = document.getElementById(idPoints);
+    this.textGameOver = document.getElementById('game-over');
     this.ctx = this.canvas.getContext('2d');
 
     this.colors = ['cyan', 'yellow', 'green', 'red', 'orange', 'blue', 'pink'];
@@ -61,5 +62,9 @@ class TetrisView{
 
   renderPoints(points){
     this.textPoints.textContent = points;
+  }
+  
+  renderGameOver(){
+    this.textGameOver.classList.remove('hidden');
   }
 }
